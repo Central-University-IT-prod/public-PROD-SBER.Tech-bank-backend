@@ -1,0 +1,472 @@
+openapi: 3.1.0
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /representatives/{id}:
+    get:
+      summary: Get Representative
+      operationId: get_representative_representatives__id__get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepresentativeSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /meet:
+    post:
+      summary: New Meet
+      operationId: new_meet_meet_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMeetSchema'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMeetSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /meet/{id}:
+    get:
+      summary: Get Meet
+      operationId: get_meet_meet__id__get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMeetSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      summary: Patch Meet
+      operationId: patch_meet_meet__id__patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchMeetSchema'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMeetSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /meets:
+    get:
+      summary: Get Meets
+      operationId: get_meets_meets_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetMeetSchema'
+                title: Response Get Meets Meets Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /meets/{id}:
+    delete:
+      summary: Delete Meet
+      operationId: delete_meet_meets__id__delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /operation/{id}:
+    get:
+      summary: Get Operation
+      operationId: get_operation_operation__id__get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /admin/add_operation:
+    post:
+      summary: New Operation
+      operationId: new_operation_admin_add_operation_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostOperationSchema'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /admin/add_representative:
+    post:
+      summary: New Representative
+      operationId: new_representative_admin_add_representative_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRepresentativeSchema'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepresentativeSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /ping:
+    get:
+      summary: Root
+      operationId: root_ping_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    GetMeetSchema:
+      properties:
+        datetime:
+          type: string
+          format: date-time
+          title: Datetime
+        place_address:
+          type: string
+          title: Place Address
+        place_longtitude:
+          type: number
+          title: Place Longtitude
+        place_latitude:
+          type: number
+          title: Place Latitude
+        operations_ids:
+          items:
+            type: integer
+          type: array
+          title: Operations Ids
+        id:
+          type: string
+          format: uuid
+          title: Id
+        representative_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Representative Id
+        approximate_end_datetime:
+          type: string
+          format: date-time
+          title: Approximate End Datetime
+      type: object
+      required:
+      - datetime
+      - place_address
+      - place_longtitude
+      - place_latitude
+      - operations_ids
+      - id
+      - representative_id
+      - approximate_end_datetime
+      title: GetMeetSchema
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OperationSchema:
+      properties:
+        name:
+          type: string
+          title: Name
+        product:
+          type: string
+          title: Product
+        documents:
+          items:
+            type: string
+          type: array
+          title: Documents
+        duration:
+          type: string
+          format: time
+          title: Duration
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - name
+      - product
+      - documents
+      - duration
+      - id
+      title: OperationSchema
+    PatchMeetSchema:
+      properties:
+        datetime:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Datetime
+        place_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Place Address
+        place_longtitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Place Longtitude
+        place_latitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Place Latitude
+        operations_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Operations Ids
+      type: object
+      title: PatchMeetSchema
+    PostMeetSchema:
+      properties:
+        datetime:
+          type: string
+          format: date-time
+          title: Datetime
+        place_address:
+          type: string
+          title: Place Address
+        place_longtitude:
+          type: number
+          title: Place Longtitude
+        place_latitude:
+          type: number
+          title: Place Latitude
+        operations_ids:
+          items:
+            type: integer
+          type: array
+          title: Operations Ids
+      type: object
+      required:
+      - datetime
+      - place_address
+      - place_longtitude
+      - place_latitude
+      - operations_ids
+      title: PostMeetSchema
+    PostOperationSchema:
+      properties:
+        name:
+          type: string
+          title: Name
+        product:
+          type: string
+          title: Product
+        documents:
+          items:
+            type: string
+          type: array
+          title: Documents
+        duration:
+          type: string
+          format: time
+          title: Duration
+      type: object
+      required:
+      - name
+      - product
+      - documents
+      - duration
+      title: PostOperationSchema
+    PostRepresentativeSchema:
+      properties:
+        name:
+          type: string
+          title: Name
+        surname:
+          type: string
+          title: Surname
+        photo_inner_url:
+          type: string
+          title: Photo Inner Url
+      type: object
+      required:
+      - name
+      - surname
+      - photo_inner_url
+      title: PostRepresentativeSchema
+    RepresentativeSchema:
+      properties:
+        name:
+          type: string
+          title: Name
+        surname:
+          type: string
+          title: Surname
+        photo_inner_url:
+          type: string
+          title: Photo Inner Url
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - name
+      - surname
+      - photo_inner_url
+      - id
+      title: RepresentativeSchema
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
